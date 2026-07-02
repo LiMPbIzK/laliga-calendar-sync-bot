@@ -1,0 +1,36 @@
+name: Sincronización de Calendario y Alertas
+
+on:
+  schedule:
+    # Se ejecuta cada 4 horas (a los 0 minutos de las horas correspondientes en UTC)
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # Permite ejecución manual desde la interfaz de GitHub
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Configurar el Repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Instalar Dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Ejecutar Bot de Sincronización
+      env:
+        GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
+        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        EQUIPO_OBJETIVO: ${{ secrets.EQUIPO_OBJETIVO }}
+        URL_LIV_DIVISION: ${{ secrets.URL_LIV_DIVISION }}
+      run: python main.py
