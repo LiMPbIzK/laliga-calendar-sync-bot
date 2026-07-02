@@ -2,7 +2,7 @@
 
 ## ⚙️ Variables de Entorno y Secretos (GitHub Secrets)
 
-Para desplegar este bot, es necesario configurar las siguientes llaves secretas en `Settings > Secrets and variables > Actions`.
+Para desplegar este bot, es necesario configurar las siguientes llaves secretas en "Settings > Secrets and variables > Actions".
 
 > ⚠️ **IMPORTANTE:** El valor de `EQUIPO_OBJETIVO` debe coincidir exactamente con el nombre que utiliza la web emisora. Copia y pega el nombre de tu equipo directamente desde los siguientes desplegables:
 
