@@ -43,22 +43,22 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 <summary>📋 Ver nombres exactos de PRIMERA DIVISIÓN</summary>
 
 * Alavés
-* Athletic Club
-* Atlético de Madrid
+* Athletic
+* Atlético
 * Barcelona
-* Celta de Vigo
-* Deportivo de A Coruña
+* Betis
+* Celta
+* Deportivo
 * Elche
 * Espanyol
 * Getafe
 * Levante
 * Málaga
 * Osasuna
-* Racing de Santander
-* Rayo Vallecano
-* Real Betis
+* Racing
+* Rayo
 * Real Madrid
-* Real Sociedad
+* R. Sociedad
 * Sevilla
 * Valencia
 * Villarreal
@@ -70,26 +70,26 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 
 * Albacete
 * Almería
-* Andorra
 * Burgos
 * Cádiz
 * Castellón
-* Celta Fortuna
+* Celta de Vigo B
 * Ceuta
 * Córdoba
 * Eibar
 * Eldense
+* FC Andorra
 * Girona
 * Granada
 * Las Palmas
 * Leganés
 * Mallorca
-* Real Oviedo
-* Real Sociedad "B"
-* Real Valladolid
+* Oviedo
+* Real Sociedad B
 * Sabadell
-* Sporting de Gijón
+* Sporting
 * Tenerife
+* Valladolid
 
 </details>
 
