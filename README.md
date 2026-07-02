@@ -1,8 +1,8 @@
 ---
 
-## ⚙️ Variables de Envono y Secretos (GitHub Secrets)
+## ⚙️ Variables de Entorno y Secretos (GitHub Secrets)
 
-Para desplegar este bot, es necesario configurar las siguientes llaves secretas en `Settings > Secrets and variables > Actions`. 
+Para desplegar este bot, es necesario configurar las siguientes llaves secretas en `Settings > Secrets and variables > Actions`.
 
 > ⚠️ **IMPORTANTE:** El valor de `EQUIPO_OBJETIVO` debe coincidir exactamente con el nombre que utiliza la web emisora. Copia y pega el nombre de tu equipo directamente desde los siguientes desplegables:
 
@@ -62,13 +62,13 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 
 ### Tabla de Configuración de Secretos
 
-| Secreto | Tipo / Formato | Descripción / Valor a introducir |
+| Secreto | Tipo / Formato | Descripción |
 | :--- | :--- | :--- |
-| `EQUIPO_OBJETIVO` | Texto plano | El nombre exacto copiado de los desplegables de arriba (Ej: `Las Palmas`). |
-| `URL_LIV_DIVISION` | URL | Enlace correspondiente: <br>• Primera: `https://www.elmundo.es/deportes/futbol/primera-division/calendario.html`<br>• Segunda: `https://www.elmundo.es/deportes/futbol/segunda-division/calendario.html` |
-| `GOOGLE_CALENDAR_ID` | String / Email | Identificador del calendario dedicado de Google creado para el equipo. |
+| `EQUIPO_OBJETIVO` | Texto plano | El nombre exacto de tu equipo (Ej: Real Madrid, Eldense). |
+| `URL_LIV_DIVISION` | URL | URL del calendario de El Mundo (Primera o Segunda división). |
+| `GOOGLE_CALENDAR_ID` | Texto plano | Identificador del calendario dedicado de Google. |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | JSON | Bloque de credenciales completo de la cuenta de servicio de Google Cloud. |
-| `TELEGRAM_BOT_TOKEN` | Token numérico | Llave de autenticación del bot proporcionada por `@BotFather`. |
-| `TELEGRAM_CHAT_ID` | Numérico | ID de tu chat personal de Telegram (obtenido vía `@userinfobot`). |
+| `TELEGRAM_BOT_TOKEN` | Texto plano | Llave de autenticación del bot de @BotFather. |
+| `TELEGRAM_CHAT_ID` | Numérico | ID de tu chat personal de Telegram. |
 
 ---
