@@ -1,9 +1,6 @@
 name: Sincronización de Calendario y Alertas
 
 on:
-  schedule:
-    # Se ejecuta cada 4 horas (a los 0 minutos de las horas correspondientes en UTC)
-    - cron: '0 */4 * * *'
   workflow_dispatch: # Permite ejecución manual desde la interfaz de GitHub
 
 jobs:
