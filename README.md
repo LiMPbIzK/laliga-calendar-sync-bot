@@ -11,7 +11,7 @@ A diferencia de las soluciones estáticas, este repositorio permite a cualquier 
 El sistema está diseñado bajo un modelo asíncrono de consumo cero (sin servidores *always-on*), aprovechando entornos virtuales temporales:
 
 * **Lenguaje:** Python 3.11+
-* **Web Scraping:** Beautiful Soup 4 & Requests (Estructuración dinámica de tablas HTML).
+* **Web Scraping:** Beautiful Soup 4 & Requests (Estructuración dinámica de tablas HTML).``
 * **Integración de Calendario:** Google Calendar API v3 (Autenticación robusta mediante OAuth2 Service Account).
 * **Notificaciones:** Telegram Bot API (Envío de alertas asíncronas vía HTTP POST).
 * **Automatización (CI/CD):** GitHub Actions (Planificador de tareas Cron cada 4 horas).
@@ -130,5 +130,16 @@ Para realizar pruebas de desarrollo o depuración en local:
 2. Instalar dependencias:
    pip install -r requirements.txt
 
-3. Exportar las variables de entorno en tu entorno local y ejecutar el punto de entrada:
+3. Configurar variables de entorno locales (VS Code):
+   Crea un archivo llamado .env en la raíz del proyecto (protege este archivo mediante .gitignore para no exponer tus credenciales de forma pública).
+   Añade tus datos con el siguiente formato:
+
+   EQUIPO_OBJETIVO="tu_equipo_aqui"
+   URL_LIV_DIVISION="https://www.elmundo.es/deportes/futbol/segunda-division/calendario.html"
+   TELEGRAM_BOT_TOKEN="tu_token_aqui"
+   TELEGRAM_CHAT_ID="tu_chat_id_aqui"
+   GOOGLE_CALENDAR_ID="tu_calendar_id_aqui"
+   GOOGLE_SERVICE_ACCOUNT_JSON='{"type": "service_account", ...}'
+
+5. Ejecutar el punto de entrada:
    python main.py
