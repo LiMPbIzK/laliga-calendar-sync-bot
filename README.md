@@ -143,3 +143,30 @@ Para realizar pruebas de desarrollo o depuración en local:
 
 5. Ejecutar el punto de entrada:
    python main.py
+
+## 🔑 Obtención de Credenciales de Google
+
+Si necesitas generar las credenciales de Google desde cero, sigue estos pasos para obtener los valores requeridos:
+
+### 1. Para el `GOOGLE_SERVICE_ACCOUNT_JSON`
+Este archivo se genera creando un proyecto y una cuenta de servicio en la consola de desarrolladores de Google.
+
+* **URL de la plataforma:** [Google Cloud Console](https://console.cloud.google.com/)
+* **Pasos a seguir:**
+  1. Crea un proyecto nuevo.
+  2. Busca la **API de Google Calendar** en el buscador superior y haz clic en **Habilitar**.
+  3. Ve al menú lateral izquierdo: **IAM y administración** > **Cuentas de servicio**.
+  4. Crea una cuenta de servicio (puedes llamarla `bot-futbol`).
+  5. Entra en la cuenta de servicio recién creada, ve a la pestaña **Claves (Keys)** > **Agregar clave** > **Crear clave nueva** en formato **JSON**. Al pulsar ahí, se descargará automáticamente el archivo de texto que debes pegar en tu secreto.
+
+### 2. Para el `GOOGLE_CALENDAR_ID`
+Este identificador se extrae de la interfaz normal de tu cuenta de Google Calendar, tras crear el calendario dedicado para los partidos.
+
+* **URL de la plataforma:** [Google Calendar](https://calendar.google.com/)
+* **Pasos a seguir:**
+  1. En el menú de la izquierda, junto a "Otros calendarios", haz clic en el botón **+** > **Crear un calendario** (ej: *Partidos de Fútbol*).
+  2. Una vez creado, entra en la **Configuración** de ese calendario específico.
+  3. Baja hasta la sección llamada **Integrar el calendario**.
+  4. Ahí verás un campo que dice **ID del calendario** (suele tener un formato como `cadena_aleatoria@group.calendar.google.com`). Ese texto es tu ID.
+
+> ⚠️ **Paso obligatorio de vinculación:** Para que la cuenta de servicio pueda escribir en tu calendario, debes ir a la sección **Compartir con personas específicas o grupos** de la configuración de tu calendario, añadir el email largo de la cuenta de servicio (lo encontrarás dentro del archivo JSON) y asignarle el permiso de **Hacer cambios y administrar la compartición**.
