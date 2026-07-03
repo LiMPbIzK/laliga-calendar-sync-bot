@@ -96,13 +96,13 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 ### Tabla de Configuración de Secretos
 
 | Secreto | Tipo / Formato | Descripción |
-| :--- | :--- | :--- |
-| `EQUIPO_OBJETIVO` | Texto plano | El nombre exacto de tu equipo (Ej: Real Madrid, Eldense). |
-| `URL_LIV_DIVISION` | URL | URL del calendario de El Mundo (Primera o Segunda división). |
-| `GOOGLE_CALENDAR_ID` | Texto plano | Identificador del calendario dedicado de Google. |
-| `GOOGLE_SERVICE_ACCOUNT_JSON` | JSON | Bloque de credenciales completo de la cuenta de servicio de Google Cloud. |
-| `TELEGRAM_BOT_TOKEN` | Texto plano | Llave de autenticación del bot de @BotFather. |
-| `TELEGRAM_CHAT_ID` | Numérico | ID de tu chat personal de Telegram. |
+| :--- | :--- | :--- |  
+| `EQUIPO_OBJETIVO` | Texto plano | El nombre exacto de tu equipo (Ej: Real Madrid, Eldense). |  
+| `URL_LIV_DIVISION` | URL | URL del calendario de El Mundo (Primera o Segunda división). |  
+| `GOOGLE_CALENDAR_ID` | Texto plano | Identificador del calendario dedicado de Google. |  
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | JSON | Bloque de credenciales completo de la cuenta de servicio de Google Cloud. |  
+| `TELEGRAM_BOT_TOKEN` | Texto plano | Llave de autenticación del bot de @BotFather. |  
+| `TELEGRAM_CHAT_ID` | Numérico | ID de tu chat personal de Telegram. |  
 
 ---
 
@@ -112,10 +112,10 @@ Las alertas utilizan la pasarela oficial de Telegram con formato `Markdown`, ent
 
 🚨 ¡Cambio de horario en la próxima jornada!
 
-📌 Partido: [Tu Equipo] vs [Rival] (Jornada X)
-❌ Antes: DD/MM a las HH:MM
-✅ Ahora: DD/MM a las HH:MM
-🏟️ Lugar: Estadio del encuentro
+📌 Partido: [Tu Equipo] vs [Rival] (Jornada X)  
+❌ Antes: DD/MM a las HH:MM  
+✅ Ahora: DD/MM a las HH:MM  
+🏟️ Lugar: Estadio del encuentro  
 
 ---
 
@@ -123,25 +123,25 @@ Las alertas utilizan la pasarela oficial de Telegram con formato `Markdown`, ent
 
 Para realizar pruebas de desarrollo o depuración en local:
 
-1. Clonar el repositorio:
-   git clone https://github.com/tu-usuario/laliga-calendar-sync-bot.git
-   cd laliga-calendar-sync-bot
+1. Clonar el repositorio:  
+   git clone https://github.com/tu-usuario/laliga-calendar-sync-bot.git  
+   cd laliga-calendar-sync-bot  
 
-2. Instalar dependencias:
-   pip install -r requirements.txt
+2. Instalar dependencias:  
+   pip install -r requirements.txt  
 
-3. Configurar variables de entorno locales (VS Code):
-   Crea un archivo llamado .env en la raíz del proyecto (protege este archivo mediante .gitignore para no exponer tus credenciales de forma pública).
-   Añade tus datos con el siguiente formato:
+3. Configurar variables de entorno locales (VS Code):  
+   Crea un archivo llamado .env en la raíz del proyecto (protege este archivo mediante .gitignore para no exponer tus credenciales de forma pública).  
+   Añade tus datos con el siguiente formato:  
 
-   EQUIPO_OBJETIVO="tu_equipo_aqui"
-   URL_LIV_DIVISION="https://www.elmundo.es/deportes/futbol/segunda-division/calendario.html"
-   TELEGRAM_BOT_TOKEN="tu_token_aqui"
-   TELEGRAM_CHAT_ID="tu_chat_id_aqui"
-   GOOGLE_CALENDAR_ID="tu_calendar_id_aqui"
-   GOOGLE_SERVICE_ACCOUNT_JSON='{"type": "service_account", ...}'
+   EQUIPO_OBJETIVO="tu_equipo_aqui"  
+   URL_LIV_DIVISION="https://www.elmundo.es/deportes/futbol/segunda-division/calendario.html"  
+   TELEGRAM_BOT_TOKEN="tu_token_aqui"  
+   TELEGRAM_CHAT_ID="tu_chat_id_aqui"  
+   GOOGLE_CALENDAR_ID="tu_calendar_id_aqui"  
+   GOOGLE_SERVICE_ACCOUNT_JSON='{"type": "service_account", ...}'  
 
-5. Ejecutar el punto de entrada:
+5. Ejecutar el punto de entrada:  
    python main.py
 
 ## 🔑 Obtención de Credenciales de Google
