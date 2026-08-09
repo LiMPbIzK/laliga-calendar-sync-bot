@@ -14,7 +14,7 @@ El sistema está diseñado bajo un modelo asíncrono de consumo cero (sin servid
 * **Web Scraping:** Beautiful Soup 4 & Requests (Estructuración dinámica de tablas HTML).``
 * **Integración de Calendario:** Google Calendar API v3 (Autenticación robusta mediante OAuth2 Service Account).
 * **Notificaciones:** Telegram Bot API (Envío de alertas asíncronas vía HTTP POST).
-* **Automatización (CI/CD):** GitHub Actions (Planificador de tareas Cron cada 4 horas).
+* **Automatización (CI/CD):** GitHub Actions (ejecución manual mediante `workflow_dispatch`).
 
 ---
 
@@ -22,14 +22,16 @@ El sistema está diseñado bajo un modelo asíncrono de consumo cero (sin servid
 
 El ciclo de ejecución sigue una lógica estructurada de cuatro pasos:
 
-1. **Activación:** GitHub Actions levanta el entorno en la nube de forma automatizada cada 4 horas.
+1. **Activación:** Se lanza el entorno en la nube de forma manual desde GitHub (pestaña *Actions* → *Run workflow*).
 2. **Extracción Dinámica:** El script consume la URL de la división configurada, localiza las filas correspondientes al equipo objetivo y parsea las cadenas de texto para extraer rivales, fechas (ISO), horas y campos de ubicación.
 3. **Evaluación de Delta:** Compara minuciosamente la marca de tiempo (timestamp) de la web con el evento agendado en Google Calendar.
    * *Si no hay cambios:* El proceso termina limpiamente ahorrando operaciones de escritura.
    * *Si hay desfase horario:* Actualiza la API de Google Calendar y calcula el impacto temporal del cambio.
 4. **Filtrado Inteligente de Alertas:**
-   * *Partido Lejano:* Si el partido modificado pertenece a jornadas lejanas, se sincroniza en silencio en el calendario para evitar saturación.
-   * *Jornada Inmediata:* Si el cambio afecta al próximo partido cronológico del equipo a partir de la fecha actual, se dispara una alerta estructurada al bot de Telegram.
+   * *Partido Lejano:* Si el partido modificado pertenece a jornadas futuras (incluida la próxima), se dispara una alerta estructurada al bot de Telegram.
+   * *Partido Jugado:* Si el partido modificado ya se ha disputado, la sincronización se realiza en silencio para evitar ruido.
+
+> ℹ️ Cada evento de Google Calendar incluye la fecha en su título (ej: `Real Madrid vs R. Sociedad (J1 - 26/08/2026)`) para evitar colisiones entre temporadas. Los eventos creados por el bot que ya no aparezcan en el calendario web se eliminan automáticamente.
 
 ---
 
@@ -99,6 +101,7 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 | :--- | :--- | :--- |  
 | `EQUIPO_OBJETIVO` | Texto plano | El nombre exacto de tu equipo (Ej: Real Madrid, Eldense). |  
 | `URL_LIV_DIVISION` | URL | URL del calendario de El Mundo (Primera o Segunda división). |  
+| `TEMPORADA_INICIO` | Opcional | Año de inicio de la temporada (Ej: `2026`). Si no se define, se calcula automáticamente. |  
 | `GOOGLE_CALENDAR_ID` | Texto plano | Identificador del calendario dedicado de Google. |  
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | JSON | Bloque de credenciales completo de la cuenta de servicio de Google Cloud. |  
 | `TELEGRAM_BOT_TOKEN` | Texto plano | Llave de autenticación del bot de @BotFather. |  
@@ -110,9 +113,9 @@ Para desplegar este bot, es necesario configurar las siguientes llaves secretas 
 
 Las alertas utilizan la pasarela oficial de Telegram con formato `Markdown`, entregando notificaciones compactas y legibles en dispositivos móviles:
 
-🚨 ¡Cambio de horario en la próxima jornada!
+🚨 ¡Cambio de horario detectado!
 
-📌 Partido: [Tu Equipo] vs [Rival] (Jornada X)  
+📌 Partido: [Tu Equipo] vs [Rival] (Jornada X - DD/MM/AAAA)  
 ❌ Antes: DD/MM a las HH:MM  
 ✅ Ahora: DD/MM a las HH:MM  
 🏟️ Lugar: Estadio del encuentro  
@@ -131,7 +134,7 @@ Para realizar pruebas de desarrollo o depuración en local:
    pip install -r requirements.txt  
 
 3. Configurar variables de entorno locales (VS Code):  
-   Crea un archivo llamado .env en la raíz del proyecto (protege este archivo mediante .gitignore para no exponer tus credenciales de forma pública).  
+   Copia el archivo `.env.example` a `.env` y rellena tus datos (protege este archivo mediante `.gitignore` para no exponer tus credenciales de forma pública). El script carga automáticamente el `.env`.  
    Añade tus datos con el siguiente formato:  
 
    EQUIPO_OBJETIVO="tu_equipo_aqui"  
