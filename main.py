@@ -54,47 +54,84 @@ def extraer_calendario_elmundo(url_division, nombre_equipo):
         if response.status_code != 200:
             print(f"[Error] No se pudo acceder a la URL: {url_division}")
             return []
-            
-        soup = BeautifulSoup(response.text, 'html.parser')
-        filas_partidos = soup.find_all('tr')
+
+        # El Mundo sirve la página con charset íbero (p. ej. iso-8859-15) que
+        # requests no detecta de forma fiable. Decodificamos los bytes crudos
+        # con el charset declarado en el HTML para no corromper tildes.
+        charset = None
+        match_charset = re.search(r'charset=([\w-]+)', response.text, re.IGNORECASE)
+        if match_charset:
+            charset = match_charset.group(1)
+        if not charset:
+            charset = response.encoding or "utf-8"
+        try:
+            contenido = response.content.decode(charset)
+        except (LookupError, UnicodeDecodeError):
+            contenido = response.text
+
+        soup = BeautifulSoup(contenido, 'html.parser')
         partidos_estructurados = []
-        contador_jornada = 1
         temporada_inicio = os.environ.get("TEMPORADA_INICIO")
-        
-        for fila in filas_partidos:
-            texto = fila.get_text()
-            if nombre_equipo in texto:
-                texto_limpio = " ".join(texto.split()).strip()
-                if len(texto_limpio) > 15:
-                    match = re.search(r'^(.*?)\s+(\d{2}/\d{2})\s+(\d{2}:\d{2})\s+(.*)$', texto_limpio)
-                    if match:
-                        local = match.group(1).strip()
-                        fecha_corta = match.group(2).strip()
-                        hora = match.group(3).strip()
-                        visitante = match.group(4).strip()
-                        
-                        mes = int(fecha_corta.split('/')[1])
-                        anio = calcular_anio_temporada(mes, temporada_inicio)
-                        fecha_iso = f"{anio}-{fecha_corta.split('/')[1]}-{fecha_corta.split('/')[0]}"
-                        fecha_titulo = f"{fecha_corta}/{anio}"
-                        
-                        if local == nombre_equipo:
-                            rival = visitante
-                            ubicacion = f"Estadio del {nombre_equipo}"
-                            titulo_evento = f"{nombre_equipo} vs {rival} (J{contador_jornada} - {fecha_titulo})"
-                        else:
-                            rival = local
-                            ubicacion = f"Estadio del {rival}"
-                            titulo_evento = f"{rival} vs {nombre_equipo} (J{contador_jornada} - {fecha_titulo})"
-                        
-                        partidos_estructurados.append({
-                            "jornada": contador_jornada,
-                            "titulo": titulo_evento,
-                            "fecha_iso": fecha_iso,
-                            "hora": hora,
-                            "ubicacion": ubicacion
-                        })
-                        contador_jornada += 1
+
+        # Cada tabla corresponde a una jornada y su id indica el número real de
+        # la jornada (jornada1 ... jornada42). Usar ese id evita el off-by-one
+        # que se producía con un contador que no avanzaba en partidos jugados.
+        tablas_jornada = soup.find_all('table', id=re.compile(r'^jornada\d+$'))
+        for tabla in tablas_jornada:
+            match_id = re.search(r'jornada(\d+)', tabla.get('id', ''))
+            if not match_id:
+                continue
+            jornada = int(match_id.group(1))
+
+            # La jornada contiene TODOS los partidos; localizar la fila donde
+            # aparece el equipo seleccionado como local o visitante.
+            fila_equipo = None
+            for fila in tabla.find_all('tr'):
+                if fila.find('td') and nombre_equipo in fila.get_text():
+                    fila_equipo = fila
+                    break
+            if fila_equipo is None:
+                continue
+
+            # Saltar explícitamente los partidos ya jugados (muestran resultado,
+            # no fecha/hora) en lugar de depender de que la regex no matchee.
+            if fila_equipo.find('span', class_='resultado-partido'):
+                continue
+
+            span_fecha = fila_equipo.find('span', class_='fecha')
+            span_hora = fila_equipo.find('span', class_='hora')
+            if not span_fecha or not span_hora:
+                continue
+
+            fecha_corta = span_fecha.get_text(strip=True)
+            hora = span_hora.get_text(strip=True)
+            if not re.match(r'^\d{2}/\d{2}$', fecha_corta) or not re.match(r'^\d{2}:\d{2}$', hora):
+                continue
+
+            texto_local = fila_equipo.find('td', class_='local').get_text(strip=True) if fila_equipo.find('td', class_='local') else ""
+            texto_visitante = fila_equipo.find('td', class_='visitante').get_text(strip=True) if fila_equipo.find('td', class_='visitante') else ""
+
+            mes = int(fecha_corta.split('/')[1])
+            anio = calcular_anio_temporada(mes, temporada_inicio)
+            fecha_iso = f"{anio}-{fecha_corta.split('/')[1]}-{fecha_corta.split('/')[0]}"
+            fecha_titulo = f"{fecha_corta}/{anio}"
+
+            if nombre_equipo in texto_local:
+                rival = texto_visitante
+                ubicacion = f"Estadio del {nombre_equipo}"
+                titulo_evento = f"{nombre_equipo} vs {rival} (J{jornada} - {fecha_titulo})"
+            else:
+                rival = texto_local
+                ubicacion = f"Estadio del {rival}"
+                titulo_evento = f"{rival} vs {nombre_equipo} (J{jornada} - {fecha_titulo})"
+
+            partidos_estructurados.append({
+                "jornada": jornada,
+                "titulo": titulo_evento,
+                "fecha_iso": fecha_iso,
+                "hora": hora,
+                "ubicacion": ubicacion
+            })
         return partidos_estructurados
     except Exception as e:
         print(f"Error en extracción: {e}")
